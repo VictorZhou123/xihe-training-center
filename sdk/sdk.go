@@ -87,7 +87,9 @@ func (t TrainingCenter) GetLogDownloadURL(jobId string) (r DownloadURL, err erro
 		return
 	}
 
-	err = t.forwardTo(req, &r)
+	if err = t.forwardTo(req, &r); err != nil {
+		return
+	}
 
 	return
 }
@@ -98,7 +100,9 @@ func (t TrainingCenter) GetResultDownloadURL(jobId, file string) (r DownloadURL,
 		return
 	}
 
-	err = t.forwardTo(req, &r)
+	if err = t.forwardTo(req, &r); err != nil {
+		return
+	}
 
 	return
 }

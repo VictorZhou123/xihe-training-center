@@ -98,7 +98,9 @@ func (kv *Input) toInput() (r domain.Input, err error) {
 		return
 	}
 
-	err = kv.Value.toRef(&r.ResourceRef)
+	if err = kv.Value.toRef(&r.ResourceRef); err != nil {
+		return
+	}
 
 	return
 }
