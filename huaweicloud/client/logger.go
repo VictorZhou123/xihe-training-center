@@ -12,6 +12,8 @@ import (
 	"sort"
 	"strings"
 	"time"
+
+	"github.com/sirupsen/logrus"
 )
 
 // MAXFieldLength is the maximum string length of single field when logging
@@ -39,7 +41,10 @@ func retryTimeout(count int) time.Duration {
 func (lrt *LogRoundTripper) RoundTrip(request *http.Request) (*http.Response, error) {
 	defer func() {
 		if request.Body != nil {
-			request.Body.Close()
+			if err := request.Body.Close(); err != nil {
+				logrus.Debugf("Error closing request body: %s", err.Error())
+				return
+			}
 		}
 	}()
 
@@ -159,7 +164,14 @@ func formatJSON(raw []byte, maskBody bool) string {
 	if _, ok := data["catalog"]; ok {
 		return "{ **skipped** }"
 	}
-	if v, ok := data["token"].(map[string]interface{}); ok {
+
+	token, ok := data["token"]
+	if !ok {
+		logrus.Debugln("data['token'] not exist")
+		return ""
+	}
+	
+	if v, ok := token.(map[string]interface{}); ok {
 		if _, ok := v["catalog"]; ok {
 			return ""
 		}
@@ -212,8 +224,10 @@ func maskSecurityFields(data map[string]interface{}) bool {
 			if masked := maskSecurityFields(val); masked {
 				return true
 			}
+		default:	
 		}
 	}
+
 	return false
 }
 
