@@ -14,6 +14,11 @@ RUN apk update && apk add --no-cache \
         git \
         bash \
         libc6-compat
+
+RUN adduser mindspore -u 5000 -D
+USER mindspore
+WORKDIR /opt/app/
+
 COPY --from=BUILDER /go/src/github.com/opensourceways/xihe-training-center/huaweicloud/xihe-training-center /opt/app/xihe-training-center
 COPY --from=BUILDER /go/src/github.com/opensourceways/xihe-training-center/obsutil /opt/app/obsutil
 COPY --from=BUILDER /go/src/github.com/opensourceways/xihe-training-center/huaweicloud/trainingimpl/tools/sync_files.sh /opt/app/sync_file.sh
