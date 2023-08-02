@@ -17,6 +17,7 @@ RUN apk update && apk add --no-cache \
 
 RUN adduser mindspore -u 5000 -D
 WORKDIR /opt/app
+RUN chown -R mindspore:mindspore /opt/app
 
 COPY --chown=mindspore:mindspore --from=BUILDER /go/src/github.com/opensourceways/xihe-training-center/huaweicloud/xihe-training-center /opt/app
 COPY --chown=mindspore:mindspore --from=BUILDER /go/src/github.com/opensourceways/xihe-training-center/obsutil /opt/app
