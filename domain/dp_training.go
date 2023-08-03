@@ -32,6 +32,7 @@ var (
 
 	customizeVersionSet = map[string]string{
 		"mindspore_1.9.0-cann_6.0.RC1-py_3.7-ubuntu_18.04-amd64": "xihe-image/mindspore-ascend-ubuntu-aarch64:1.9.0-cann6.0.RC1",
+		"mindspore_1.9.0-cann_6.0.RC1-py_3.9-ubuntu_18.04-amd64": "xihe-image/mindspore-ascend-ubuntu-aarch64:1.9.0-cann6.0.RC1-new",
 	}
 )
 
