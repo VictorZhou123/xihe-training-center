@@ -71,6 +71,10 @@ func main() {
 		logrus.Fatalf("load config, err:%s", err.Error())
 	}
 
+	if err := os.Remove(o.service.ConfigFile); err != nil {
+		logrus.Fatalf("remove config file failed, err:%s", err.Error())
+	}
+
 	// domain
 	domain.Init(&cfg.Domain)
 
