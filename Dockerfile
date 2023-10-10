@@ -1,4 +1,7 @@
-FROM golang:latest as BUILDER
+FROM openeuler/openeuler:23.03 as BUILDER
+RUN dnf update -y && \
+    dnf install -y golang && \
+    go env -w GOPROXY=https://goproxy.cn,direct
 
 MAINTAINER zengchen1024<chenzeng765@gmail.com>
 
@@ -9,22 +12,19 @@ RUN cd huaweicloud && GO111MODULE=on CGO_ENABLED=0 go build -o xihe-training-cen
 RUN tar -xf ./huaweicloud/trainingimpl/tools/obsutil.tar.gz
 
 # copy binary config and utils
-FROM alpine:3.14
-RUN apk update && apk add --no-cache \
-        git \
-        bash \
-        libc6-compat
+FROM openeuler/openeuler:22.03
+RUN dnf -y update && \
+    dnf in -y shadow git bash && \
+    groupadd -g 5000 mindspore && \
+    useradd -u 5000 -g mindspore -s /bin/bash -m mindspore
 
-RUN adduser mindspore -u 5000 -D
+USER mindspore
 WORKDIR /opt/app
-RUN chown -R mindspore:mindspore /opt/app
 
 COPY --chown=mindspore:mindspore --from=BUILDER /go/src/github.com/opensourceways/xihe-training-center/huaweicloud/xihe-training-center /opt/app
 COPY --chown=mindspore:mindspore --from=BUILDER /go/src/github.com/opensourceways/xihe-training-center/obsutil /opt/app
 COPY --chown=mindspore:mindspore --from=BUILDER /go/src/github.com/opensourceways/xihe-training-center/huaweicloud/trainingimpl/tools/sync_files.sh /opt/app
 COPY --chown=mindspore:mindspore --from=BUILDER /go/src/github.com/opensourceways/xihe-training-center/huaweicloud/trainingimpl/tools/upload_folder.sh /opt/app
-
-USER mindspore
 
 ENTRYPOINT ["/opt/app/xihe-training-center"]
 
