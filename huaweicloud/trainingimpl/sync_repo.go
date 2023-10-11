@@ -113,6 +113,7 @@ func (s *helper) SyncProject(repo *training.ProjectInfo) (lastCommit string, err
 
 	v, err, _ := libutils.RunCmd(params...)
 	if err != nil {
+		params[2] = "clone_url"
 		err = fmt.Errorf(
 			"run sync shell, err=%s, params=%v",
 			err.Error(), params,
