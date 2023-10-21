@@ -131,7 +131,7 @@ func (s *trainingService) create(cmd *TrainingCreateCmd) (info domain.JobInfo, e
 	err = s.ss.syncProject(cmd.User, cmd.ProjectName, cmd.ProjectRepoId)
 	if err != nil {
 		s.log.Debugf(
-			"sync project(%s) failed",
+			"user(%s) sync project(%s) failed",
 			cmd.User.Account(), cmd.ProjectId,
 		)
 

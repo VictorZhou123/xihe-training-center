@@ -7,8 +7,6 @@ import (
 	"strings"
 )
 
-const pathSpliter = "/"
-
 var (
 	reName      = regexp.MustCompile("^[a-zA-Z0-9_-]+$")
 	reDirectory = regexp.MustCompile("^[a-zA-Z0-9_/-]+$")
